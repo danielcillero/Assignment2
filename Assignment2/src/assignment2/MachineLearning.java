@@ -8,9 +8,12 @@ import java.util.ArrayList;
 
 public class MachineLearning {
 	
-	static ArrayList<Integer> timeList = new ArrayList<>(); 
+	static ArrayList<Double> timeList = new ArrayList<>(); 
 	static ArrayList<String> nameValues = new ArrayList<>();
 	static ArrayList<Double> values = new ArrayList<>(); 
+	static ArrayList<Measurements> measurementsList = new ArrayList<Measurements>();
+	
+	static int namePos,valuePos,timePos;
 	
 	
 	public static void main(String[] args) {
@@ -19,10 +22,11 @@ public class MachineLearning {
 		
 		read_data(learningFile);
 		
-		for (int i=0 ; i<timeList.size() ; i++) {
-			
-		}
+		measurementsCreation(timeList,nameValues,values);
 		
+		for (int i=0 ; i<measurementsList.size() ; i++) {
+			System.out.println(measurementsList.get(i).param[2]);
+		}
 		
 		
 	}
@@ -31,7 +35,7 @@ public class MachineLearning {
 		
 		BufferedReader br = null;
 		String line = "";
-		String SplitBy = ";";
+		String SplitBy = ",";
 	
 		try {
 		
@@ -42,13 +46,31 @@ public class MachineLearning {
  	     
 			String[] measurements = line.split(SplitBy);
 			
-			if(!measurements[1].equals("rdfid")) { //Change this to make it general Creating the values before the main
+			if(!measurements[0].equals("rdfid")) { //Change this to make it general Creating the values before the main
 				
-				nameValues.add(measurements[2]);
-				timeList.add(Integer.parseInt(measurements[3]));
-				values.add(Double.parseDouble(measurements[4]));
+				nameValues.add(measurements[namePos]);
+				timeList.add(Double.parseDouble(measurements[timePos]));
+				values.add(Double.parseDouble(measurements[valuePos]));
 				
-			}		
+			}	else {
+				
+				for(int i = 0 ; i<measurements.length ; i++) {
+					
+					switch(measurements[i]) {
+					case "name" :
+						namePos = i;
+						break;
+					case "time" :
+						timePos = i;
+						break;
+					case "value" :
+						valuePos = i;
+						break;
+					}
+					
+				}
+				
+			}
 	
 		}
 		} catch (FileNotFoundException e) {
@@ -58,5 +80,64 @@ public class MachineLearning {
 		e.printStackTrace();
 	}		
 	}
+	
+	public static void measurementsCreation (ArrayList<Double> listTime, ArrayList<String> listNames, ArrayList<Double> listValues) {
+		
+		int numberOfValues = 0;
+		int numberofMeasurements = 0;
+		
+		for (int i=0 ; i<listTime.size() ; i++) {			
+			if (!listTime.get(i).equals(listTime.get(i+1))) {
+				numberOfValues = i;
+				break;
+			}
+		}
+		
+		for (int i=0 ; i<listTime.size() ; i++) {
+			if (listTime.get(i) > numberofMeasurements) {
+				numberofMeasurements = listTime.get(i).intValue();
+			}
+		}
+		
+		Double param[] = new Double[numberOfValues];
+				
+		for (int i=1 ; i<=numberofMeasurements ; i++) {
+			for (int j=1 ; j<=numberOfValues ; j++) {
+				
+				param[j-1] = listTime.get(i*j); /////////////////////// SOMETHING WRONG
+				
+			}
+			
+			Measurements mes = new Measurements(param);
+			measurementsList.add(mes);
+			
+		}
+		
+	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
