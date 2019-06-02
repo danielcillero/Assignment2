@@ -2,10 +2,17 @@ package assignment2;
 
 public class Measurements {
 	
-	Double param[];
+	Double volt[];
+	Double phase[];
+	Double Time;
+	String names[];
 	
-	public Measurements(Double[] parameters) {
-		this.param = parameters;
+	public Measurements(Double timeStep, Double[] voltage, Double[] phases, String[] namesOfValues) {
+		this.Time = timeStep;
+		this.volt = voltage;
+		this.phase = phases;
+		this.names = namesOfValues;
 	}
+	
 
 }
