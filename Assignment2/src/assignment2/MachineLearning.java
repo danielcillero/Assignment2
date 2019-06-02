@@ -24,10 +24,12 @@ public class MachineLearning {
 		
 		ArrayList<Measurements> measurementsList = measurementsCreation(timeList,nameValues,values,subIDs);
 		
-//		for (int i=0 ; i<measurementsList.size() ; i++) {
-//			System.out.println(measurementsList.get(i).volt[7] + " is the value " + measurementsList.get(i).names[14] +
-//					" of the time " + measurementsList.get(i).Time);
-//		}
+		for (int i=0 ; i<measurementsList.size() ; i++) {
+			System.out.println(measurementsList.get(i).VoltAverage + " with phase " + measurementsList.get(i).PhaseAverage +
+					" is the average voltage of the time " + measurementsList.get(i).Time);
+		}
+		
+		
 		
 		
 		
