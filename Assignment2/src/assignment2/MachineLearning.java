@@ -20,29 +20,28 @@ public class MachineLearning {
 		
 		String learningFile = "measurements.csv";
 		
-		read_data(learningFile);
+		read_data(learningFile); //It can be used to read the test data
 		
 		ArrayList<Measurements> measurementsList = measurementsCreation(timeList,nameValues,values,subIDs);
 		
-		for (int i=0 ; i<measurementsList.size() ; i++) {
-			System.out.println(measurementsList.get(i).VoltAverage + " with phase " + measurementsList.get(i).PhaseAverage +
-					" is the average voltage of the time " + measurementsList.get(i).Time);
-		}
+//		for (int i=0 ; i<measurementsList.size() ; i++) {
+//			System.out.println(measurementsList.get(i).VoltAverage + " with phase " + measurementsList.get(i).PhaseAverage +
+//					" is the average voltage of the time " + measurementsList.get(i).Time);
+//		}
 		
+		ArrayList<NormalizedMeasurement> normList = normalize(measurementsList); //It can be used to read the test data
+
+//		for (int i=0 ; i<normList.size() ; i++) {
+//			System.out.println(normList.get(i).Time + " has the voltage " + normList.get(i).Volt + " and the phase "
+//					+ normList.get(i).Phase);
+//		}		
 		
+		intialize(normList);
 		
 		
 		
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	public static void read_data(String dataFile) {
@@ -154,6 +153,79 @@ public class MachineLearning {
 		}
 		
 		return measurementsList;
+	}
+	
+	public static ArrayList<NormalizedMeasurement> normalize(ArrayList<Measurements> measurements) {
+		
+		Double maxVolt = 0.0;
+		Double minVolt =  1.0;
+		Double maxPhase = -180.0;
+		Double minPhase = 180.0;
+		
+		ArrayList<NormalizedMeasurement> normList = new ArrayList<>();
+		
+		for(int i=0 ; i<measurements.size() ; i++) {
+			if (measurements.get(i).voltAverage < minVolt) {
+				minVolt = measurements.get(i).voltAverage;
+			}
+			
+			if (measurements.get(i).voltAverage > maxVolt) {
+				maxVolt = measurements.get(i).voltAverage;	
+			}
+			
+			if (measurements.get(i).phaseAverage < minPhase) {
+				minPhase = measurements.get(i).phaseAverage;
+			}
+			
+			if (measurements.get(i).phaseAverage > maxPhase) {
+				maxPhase = measurements.get(i).phaseAverage;
+			}
+		}
+		
+		for(int i=0 ; i<measurements.size() ; i++) {
+			Double normPhase = (measurements.get(i).phaseAverage - minPhase)/(maxPhase - minPhase);
+			Double normVolt = (measurements.get(i).voltAverage - minVolt)/(maxVolt - minVolt);
+			
+			NormalizedMeasurement meas = new NormalizedMeasurement(measurements.get(i).time,normVolt,normPhase);
+			normList.add(meas);
+		}
+		
+		return normList;
+		
+	}	
+	
+	public static void intialize(ArrayList<NormalizedMeasurement> normList) {
+		
+		Double clusters[][] = new Double[4][2];
+		Double dist[] = new Double[4];
+		
+		// First postion for the Clusters (Change this)
+		clusters[0][0] = 0.0;
+		clusters[0][1] = 0.0;
+		clusters[1][0] = 0.0;
+		clusters[1][1] = 1.0;
+		clusters[2][0] = 1.0;
+		clusters[2][1] = 0.0;
+		clusters[3][0] = 1.0;
+		clusters[3][1] = 1.0;
+		
+		for (int i=0 ; i<normList.size() ; i++) {
+			
+			for (int j=0 ; j<4 ; j++) {
+				
+				dist[j] = Math.sqrt(((clusters[j][0] - normList.get(i).volt)*(clusters[j][0] - normList.get(i).volt)) + 
+						((clusters[j][1] - normList.get(i).phase)*(clusters[j][1] - normList.get(i).phase)));
+			}
+				
+			
+			
+			
+		}
+		
+		
+		
+		
+		
 	}
 
 }

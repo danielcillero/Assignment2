@@ -4,18 +4,18 @@ public class Measurements {
 	
 	Double volt[];
 	Double phase[];
-	Double Time;
+	Double time;
 	String names[];
-	Double VoltAverage;
-	Double PhaseAverage;
+	Double voltAverage;
+	Double phaseAverage;
 	
 	public Measurements(Double timeStep, Double[] voltage, Double[] phases, String[] namesOfValues) {
-		this.Time = timeStep;
+		this.time = timeStep;
 		this.volt = voltage;
 		this.phase = phases;
 		this.names = namesOfValues;
-		this.VoltAverage = averageVolt(voltage,phases);
-		this.PhaseAverage = averagePhase(voltage,phases);
+		this.voltAverage = averageVolt(voltage,phases);
+		this.phaseAverage = averagePhase(voltage,phases);
 	}
 	
 	
