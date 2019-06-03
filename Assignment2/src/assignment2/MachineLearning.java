@@ -23,6 +23,8 @@ public class MachineLearning {
 	static ArrayList<NormalizedMeasurement> clus3 = new ArrayList<>();
 	static ArrayList<NormalizedMeasurement> clus4 = new ArrayList<>();
 	
+	static ArrayList<Sol_Kmeans> measureClusters = new ArrayList<>();
+	
 	public static void main(String[] args) {
 		
 		String learningFile = "measurements.csv";
@@ -39,26 +41,33 @@ public class MachineLearning {
 		ArrayList<NormalizedMeasurement> normList = normalize(measurementsList); //It can be used to read the test data
 
 //		for (int i=0 ; i<normList.size() ; i++) {
-//			System.out.println(normList.get(i).Time + " has the voltage " + normList.get(i).Volt + " and the phase "
-//					+ normList.get(i).Phase);
+//			System.out.println(normList.get(i).time + " has the voltage " + normList.get(i).volt + " and the phase "
+//					+ normList.get(i).phase);
 //		}		
 				
 		intialize(normList);
 		
-		System.out.println("Cluster 1 has " + clus1.size() + ". Cluster 2 has " + clus2.size() + ". Cluster 3 has "
-				+ clus3.size() + ". Cluster 4 has " + clus4.size());
+//		System.out.println("Cluster 1 has " + clus1.size() + ". Cluster 2 has " + clus2.size() + ". Cluster 3 has "
+//				+ clus3.size() + ". Cluster 4 has " + clus4.size());
 		
 		determine_centroids();
 		
-		for (int i=0; i<2 ; i++) {
-			for (int j=0 ; j<4 ; j++) {
-				
-				System.out.println("The Centroid " + j + " has the cordinate " + i + " equal to " + centroids[j][i]);
-				
-			}			
-		}
+//		for (int i=0; i<2 ; i++) {
+//			for (int j=0 ; j<4 ; j++) {
+//				
+//				System.out.println("The Centroid " + j + " has the cordinate " + i + " equal to " + centroids[j][i]);
+//				
+//			}			
+//		}
 		
+		k_means(normList,measurementsList);
 		
+//		for (int i=0 ; i<measureClusters.size() ; i++) {
+//			
+//			System.out.println("The time step " + measureClusters.get(i).time + " is of the class " + measureClusters.get(i).cluster + 
+//					", its voltage is " + measureClusters.get(i).volt + " and its phase, " + measureClusters.get(i).phase);
+//			
+//		}
 		
 		
 		
@@ -223,10 +232,10 @@ public class MachineLearning {
 		// First postion for the Clusters (Change this)
 		centroids[0][0] = 0.0;
 		centroids[0][1] = 0.0;
-		centroids[1][0] = 0.3;
-		centroids[1][1] = 0.3;
-		centroids[2][0] = 0.6;
-		centroids[2][1] = 0.6;
+		centroids[1][0] = 0.9;
+		centroids[1][1] = 0.5;
+		centroids[2][0] = 0.8;
+		centroids[2][1] = 0.8;
 		centroids[3][0] = 1.0;
 		centroids[3][1] = 1.0;
 		
@@ -324,6 +333,148 @@ public class MachineLearning {
 		}
 		
 		centroids = new_centroids;		
+		
+	}
+	
+	public static void k_means(ArrayList<NormalizedMeasurement> normList, ArrayList<Measurements> measurements) {
+		
+		Double old_centroids[][] = new Double[4][2];
+		Double diff[] = new Double[4];
+		Double dist[] = new Double[4];
+		Double tol = 0.00001;
+		
+		while(true) {
+			
+			// Determine the new clusters of the different measurements
+			
+			clus1.clear();
+			clus2.clear();
+			clus3.clear();
+			clus4.clear();
+			
+			for (int i=0 ; i<normList.size() ; i++) {
+				
+				for (int j=0 ; j<4 ; j++) {
+					
+					dist[j] = Math.sqrt(((centroids[j][0] - normList.get(i).volt)*(centroids[j][0] - normList.get(i).volt)) + 
+							((centroids[j][1] - normList.get(i).phase)*(centroids[j][1] - normList.get(i).phase)));
+				}
+					
+				if (dist[0] < dist[1]) {
+					
+					if (dist[0] < dist[2]) {
+						
+						if (dist[0] < dist[3]) {
+							
+							clus1.add(normList.get(i));
+							continue;						
+						
+						} else {
+							
+							clus4.add(normList.get(i));
+							continue;
+							
+						}					
+					} else if (dist[2] < dist[3]) {
+									
+						clus3.add(normList.get(i));
+						continue;
+						
+					} else {
+						
+						clus4.add(normList.get(i));
+						continue;
+						
+					}
+				} else if (dist[1] < dist[2]) {
+					
+					if (dist[1] < dist[3]) {
+						
+						clus2.add(normList.get(i));
+						continue;
+						
+					} else {
+						
+						clus4.add(normList.get(i));
+						continue;
+						
+					} 	
+				} else if (dist[2] < dist[3]) {
+					
+					clus3.add(normList.get(i));
+					continue;								
+					
+				} else {
+					
+					clus4.add(normList.get(i));
+					continue;
+					
+				}
+			}
+			
+			old_centroids = centroids;
+			
+			determine_centroids(); // Determine new position of the clusters
+			
+			for(int j=0 ; j<4 ; j++) {
+				
+				diff[j] =  Math.sqrt(((centroids[j][0] - old_centroids[j][0])*(centroids[j][0] - old_centroids[j][0])) + 
+						((centroids[j][1] - old_centroids[j][1])*(centroids[j][1] - old_centroids[j][1])));
+				
+			}
+			
+			if (diff[0]<=tol && diff[1]<=tol && diff[2]<=tol && diff[3]<=tol) {
+				break;
+			}			
+			
+		}
+		
+//		System.out.println("Cluster 1 has " + clus1.size());
+//		System.out.println("Cluster 2 has " + clus2.size());
+//		System.out.println("Cluster 3 has " + clus3.size());
+//		System.out.println("Cluster 4 has " + clus4.size());
+		
+		for(int j=0 ; j<measurements.size() ; j++) {
+			
+			for(int i=0 ; i<clus1.size() ; i++) {
+				
+				if(measurements.get(j).time == clus1.get(i).time) {						
+				Sol_Kmeans sol = new Sol_Kmeans(clus1.get(i).time,measurements.get(j).voltAverage,measurements.get(j).phaseAverage,0);
+				measureClusters.add(sol);
+				break;
+				}	
+			}
+			
+		
+			for(int i=0 ; i<clus2.size() ; i++) {
+				
+				if(measurements.get(j).time == clus2.get(i).time) {		
+				Sol_Kmeans sol = new Sol_Kmeans(clus2.get(i).time,measurements.get(j).voltAverage,measurements.get(j).phaseAverage,1);
+				measureClusters.add(sol);
+				break;
+				}	
+			}
+		
+		
+			for(int i=0 ; i<clus3.size() ; i++) {
+			
+				if(measurements.get(j).time == clus3.get(i).time) {
+				Sol_Kmeans sol = new Sol_Kmeans(clus3.get(i).time,measurements.get(j).voltAverage,measurements.get(j).phaseAverage,2);
+				measureClusters.add(sol);
+				break;
+				}	
+			}
+			
+		
+			for(int i=0 ; i<clus4.size() ; i++) {
+			
+				if(measurements.get(j).time == clus4.get(i).time) {
+				Sol_Kmeans sol = new Sol_Kmeans(clus4.get(i).time,measurements.get(j).voltAverage,measurements.get(j).phaseAverage,3);
+				measureClusters.add(sol);
+				break;
+				}	
+			}
+		}
 		
 	}
 	
