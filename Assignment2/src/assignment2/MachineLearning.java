@@ -15,6 +15,13 @@ public class MachineLearning {
 	
 	static int namePos,valuePos,timePos,subIDpos;
 	
+	static Double maxVolt, minVolt, maxPhase, minPhase;
+	
+	static Double centroids[][] = new Double[4][2];
+	static ArrayList<NormalizedMeasurement> clus1 = new ArrayList<>(); 
+	static ArrayList<NormalizedMeasurement> clus2 = new ArrayList<>();
+	static ArrayList<NormalizedMeasurement> clus3 = new ArrayList<>();
+	static ArrayList<NormalizedMeasurement> clus4 = new ArrayList<>();
 	
 	public static void main(String[] args) {
 		
@@ -35,7 +42,7 @@ public class MachineLearning {
 //			System.out.println(normList.get(i).Time + " has the voltage " + normList.get(i).Volt + " and the phase "
 //					+ normList.get(i).Phase);
 //		}		
-		
+				
 		intialize(normList);
 		
 		
@@ -157,10 +164,10 @@ public class MachineLearning {
 	
 	public static ArrayList<NormalizedMeasurement> normalize(ArrayList<Measurements> measurements) {
 		
-		Double maxVolt = 0.0;
-		Double minVolt =  1.0;
-		Double maxPhase = -180.0;
-		Double minPhase = 180.0;
+		maxVolt = 0.0;
+		minVolt =  1.0;
+		maxPhase = -180.0;
+		minPhase = 180.0;
 		
 		ArrayList<NormalizedMeasurement> normList = new ArrayList<>();
 		
@@ -196,37 +203,91 @@ public class MachineLearning {
 	
 	public static void intialize(ArrayList<NormalizedMeasurement> normList) {
 		
-		Double clusters[][] = new Double[4][2];
 		Double dist[] = new Double[4];
 		
 		// First postion for the Clusters (Change this)
-		clusters[0][0] = 0.0;
-		clusters[0][1] = 0.0;
-		clusters[1][0] = 0.0;
-		clusters[1][1] = 1.0;
-		clusters[2][0] = 1.0;
-		clusters[2][1] = 0.0;
-		clusters[3][0] = 1.0;
-		clusters[3][1] = 1.0;
+		centroids[0][0] = 0.0;
+		centroids[0][1] = 0.0;
+		centroids[1][0] = 0.0;
+		centroids[1][1] = 1.0;
+		centroids[2][0] = 1.0;
+		centroids[2][1] = 0.0;
+		centroids[3][0] = 1.0;
+		centroids[3][1] = 1.0;
 		
 		for (int i=0 ; i<normList.size() ; i++) {
 			
 			for (int j=0 ; j<4 ; j++) {
 				
-				dist[j] = Math.sqrt(((clusters[j][0] - normList.get(i).volt)*(clusters[j][0] - normList.get(i).volt)) + 
-						((clusters[j][1] - normList.get(i).phase)*(clusters[j][1] - normList.get(i).phase)));
+				dist[j] = Math.sqrt(((centroids[j][0] - normList.get(i).volt)*(centroids[j][0] - normList.get(i).volt)) + 
+						((centroids[j][1] - normList.get(i).phase)*(centroids[j][1] - normList.get(i).phase)));
 			}
 				
-			
-			
-			
+			if (dist[0] < dist[1]) {
+				
+				if (dist[0] < dist[2]) {
+					
+					if (dist[0] < dist[3]) {
+						
+						clus1.add(normList.get(i));
+						continue;						
+					
+					} else {
+						
+						clus4.add(normList.get(i));
+						continue;
+						
+					}					
+				} else if (dist[2] < dist[3]) {
+								
+					clus3.add(normList.get(i));
+					continue;
+					
+				} else {
+					
+					clus4.add(normList.get(i));
+					continue;
+					
+				}
+			} else if (dist[1] < dist[2]) {
+				
+				if (dist[1] < dist[3]) {
+					
+					clus2.add(normList.get(i));
+					continue;
+					
+				} else {
+					
+					clus4.add(normList.get(i));
+					continue;
+					
+				} 	
+			} else if (dist[2] < dist[3]) {
+				
+				clus3.add(normList.get(i));
+				continue;								
+				
+			} else {
+				
+				clus4.add(normList.get(i));
+				continue;
+				
+			}
 		}
-		
-		
+	}
+	
+	public static void determine_centroids () {
 		
 		
 		
 	}
+	
+	
+	
+	
+	
+	
+	
 
 }
 
