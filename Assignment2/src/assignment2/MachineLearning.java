@@ -45,6 +45,21 @@ public class MachineLearning {
 				
 		intialize(normList);
 		
+		System.out.println("Cluster 1 has " + clus1.size() + ". Cluster 2 has " + clus2.size() + ". Cluster 3 has "
+				+ clus3.size() + ". Cluster 4 has " + clus4.size());
+		
+		determine_centroids();
+		
+		for (int i=0; i<2 ; i++) {
+			for (int j=0 ; j<4 ; j++) {
+				
+				System.out.println("The Centroid " + j + " has the cordinate " + i + " equal to " + centroids[j][i]);
+				
+			}			
+		}
+		
+		
+		
 		
 		
 		
@@ -208,10 +223,10 @@ public class MachineLearning {
 		// First postion for the Clusters (Change this)
 		centroids[0][0] = 0.0;
 		centroids[0][1] = 0.0;
-		centroids[1][0] = 0.0;
-		centroids[1][1] = 1.0;
-		centroids[2][0] = 1.0;
-		centroids[2][1] = 0.0;
+		centroids[1][0] = 0.3;
+		centroids[1][1] = 0.3;
+		centroids[2][0] = 0.6;
+		centroids[2][1] = 0.6;
 		centroids[3][0] = 1.0;
 		centroids[3][1] = 1.0;
 		
@@ -276,11 +291,43 @@ public class MachineLearning {
 		}
 	}
 	
-	public static void determine_centroids () {
+	public static void determine_centroids() {
 		
+		Double new_centroids[][] = { {0.0,0.0},{0.0,0.0},{0.0,0.0},{0.0,0.0} };
 		
+		for (int i=0 ; i<clus1.size() ; i++) {
+			
+			new_centroids[0][0] += clus1.get(i).volt/clus1.size();
+			new_centroids[0][1] += clus1.get(i).phase/clus1.size();
+			
+		}
+		
+		for (int i=0 ; i<clus2.size() ; i++) {
+			
+			new_centroids[1][0] += clus2.get(i).volt/clus2.size();
+			new_centroids[1][1] += clus2.get(i).phase/clus2.size();
+			
+		}
+		
+		for (int i=0 ; i<clus3.size() ; i++) {
+			
+			new_centroids[2][0] += clus3.get(i).volt/clus3.size();
+			new_centroids[2][1] += clus3.get(i).phase/clus3.size();
+			
+		}
+		
+		for (int i=0 ; i<clus4.size() ; i++) {
+			
+			new_centroids[3][0] += clus4.get(i).volt/clus4.size();
+			new_centroids[3][1] += clus4.get(i).phase/clus4.size();
+			
+		}
+		
+		centroids = new_centroids;		
 		
 	}
+	
+	
 	
 	
 	
