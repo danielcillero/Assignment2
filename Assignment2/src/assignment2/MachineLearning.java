@@ -69,8 +69,13 @@ public class MachineLearning {
 //			
 //		}
 		
+		String testFile = "analog_values.csv";
 		
+		read_data(testFile); //It can be used to read the test data
 		
+		ArrayList<Measurements> testList = measurementsCreation(timeList,nameValues,values,subIDs);
+		
+		KNN.KNNClassification(measureClusters, testList);
 		
 	}
 	

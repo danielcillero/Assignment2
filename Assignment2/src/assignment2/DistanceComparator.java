@@ -6,7 +6,7 @@ import java.util.Comparator;
 
 
 
-public class DistanceComparator implements Comparator<Sol_Kmeans> {
+public class DistanceComparator implements Comparator<Result> {
 
 	@Override
     public int compare(Result a, Result b) {

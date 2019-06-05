@@ -3,9 +3,10 @@ package assignment2;
 public class Result {
 
 	double distance ;
-	String label;
-	public Result(double distance, String label){
+	int cluster;
+	
+	public Result(double distance, int cluster){
 	    this.distance = distance;
-	    this.label = label;	    	    
+	    this.cluster = cluster;	    	    
     }
 }
