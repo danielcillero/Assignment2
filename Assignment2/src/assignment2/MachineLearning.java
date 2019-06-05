@@ -228,16 +228,60 @@ public class MachineLearning {
 	public static void intialize(ArrayList<NormalizedMeasurement> normList) {
 		
 		Double dist[] = new Double[4];
+		Double distance = 0.0;
+
 		
-		// First postion for the Clusters (Change this)
-		centroids[0][0] = 0.0;
-		centroids[0][1] = 0.0;
-		centroids[1][0] = 0.9;
-		centroids[1][1] = 0.5;
-		centroids[2][0] = 0.8;
-		centroids[2][1] = 0.8;
-		centroids[3][0] = 1.0;
-		centroids[3][1] = 1.0;
+		// First position for the Clusters (Change this)
+		centroids[0][0] = 0.5;
+		centroids[0][1] = 0.5;
+		
+		for (int i=0 ; i<normList.size() ; i++) {
+			
+			Double newdistance = Math.sqrt(((centroids[0][0] - normList.get(i).volt)*(centroids[0][0] - normList.get(i).volt)) + 
+					((centroids[0][1] - normList.get(i).phase)*(centroids[0][1] - normList.get(i).phase)));
+			
+			if (newdistance>distance) {
+				distance = newdistance;
+				centroids[1][0] = normList.get(i).volt;
+				centroids[1][1] = normList.get(i).phase;				
+			}			
+		}
+		
+		distance = 0.0;
+		
+		for (int i=0 ; i<normList.size() ; i++) {
+			
+			Double newdistance0 = Math.sqrt(((centroids[0][0] - normList.get(i).volt)*(centroids[0][0] - normList.get(i).volt)) + 
+					((centroids[0][1] - normList.get(i).phase)*(centroids[0][1] - normList.get(i).phase)));
+			Double newdistance1 = Math.sqrt(((centroids[1][0] - normList.get(i).volt)*(centroids[1][0] - normList.get(i).volt)) + 
+					((centroids[1][1] - normList.get(i).phase)*(centroids[1][1] - normList.get(i).phase)));
+			Double newdistance = (newdistance0 + newdistance1)/2; 
+			
+			if (newdistance>distance) {
+				distance = newdistance;
+				centroids[2][0] = normList.get(i).volt;
+				centroids[2][1] = normList.get(i).phase;				
+			}			
+		}
+		
+		distance = 0.0;
+		
+		for (int i=0 ; i<normList.size() ; i++) {
+			
+			Double newdistance0 = Math.sqrt(((centroids[0][0] - normList.get(i).volt)*(centroids[0][0] - normList.get(i).volt)) + 
+					((centroids[0][1] - normList.get(i).phase)*(centroids[0][1] - normList.get(i).phase)));
+			Double newdistance1 = Math.sqrt(((centroids[1][0] - normList.get(i).volt)*(centroids[1][0] - normList.get(i).volt)) + 
+					((centroids[1][1] - normList.get(i).phase)*(centroids[1][1] - normList.get(i).phase)));
+			Double newdistance2 = Math.sqrt(((centroids[2][0] - normList.get(i).volt)*(centroids[2][0] - normList.get(i).volt)) + 
+					((centroids[2][1] - normList.get(i).phase)*(centroids[2][1] - normList.get(i).phase)));
+			Double newdistance = (newdistance0 + newdistance1 + newdistance2)/3; 
+			
+			if (newdistance>distance) {
+				distance = newdistance;
+				centroids[3][0] = normList.get(i).volt;
+				centroids[3][1] = normList.get(i).phase;				
+			}			
+		}
 		
 		for (int i=0 ; i<normList.size() ; i++) {
 			
@@ -298,6 +342,12 @@ public class MachineLearning {
 				
 			}
 		}
+		
+		System.out.println("Initial Cluster 1 has " + clus1.size());
+		System.out.println("Initial Cluster 2 has " + clus2.size());
+		System.out.println("Initial Cluster 3 has " + clus3.size());
+		System.out.println("Initial Cluster 4 has " + clus4.size());
+		
 	}
 	
 	public static void determine_centroids() {
@@ -429,10 +479,10 @@ public class MachineLearning {
 			
 		}
 		
-//		System.out.println("Cluster 1 has " + clus1.size());
-//		System.out.println("Cluster 2 has " + clus2.size());
-//		System.out.println("Cluster 3 has " + clus3.size());
-//		System.out.println("Cluster 4 has " + clus4.size());
+		System.out.println("Cluster 1 has " + clus1.size());
+		System.out.println("Cluster 2 has " + clus2.size());
+		System.out.println("Cluster 3 has " + clus3.size());
+		System.out.println("Cluster 4 has " + clus4.size());
 		
 		for(int j=0 ; j<measurements.size() ; j++) {
 			
