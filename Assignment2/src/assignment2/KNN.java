@@ -9,12 +9,10 @@ import java.util.Collections;
 
 public class KNN {
 	
-	public static void KNNClassification(ArrayList<Sol_Kmeans> measureClusters, ArrayList<Measurements> testList){
+	public static void KNNClassification(ArrayList<Measurements> trainingList, ArrayList<Measurements> testList){
 		  
 		int K=5;
-		
-		
-		ArrayList<String> testType = new ArrayList<String>();	
+			
 	
 		// a test value
 		for(Measurements testValue : testList){
@@ -22,11 +20,11 @@ public class KNN {
 			// create object Result that contains distance to a specific flower and flower’s type
 			ArrayList<Result> resultList = new ArrayList<Result>();
 			
-			for(Sol_Kmeans measurement : measureClusters){
+			for(Measurements measurement : trainingList){
 				
 				double dist = 0.0;
 			
-				dist= Math.pow((measurement.volt-testValue.voltAverage),2)+Math.pow((measurement.volt-testValue.voltAverage),2);
+				dist= Math.pow((measurement.voltAverage-testValue.voltAverage),2)+Math.pow((measurement.voltAverage-testValue.voltAverage),2);
 	
 				// calculate variable dist – square of Euclidean distance from query measurements to flower’s dimensional parameters
 				
@@ -64,34 +62,34 @@ public class KNN {
 			if(c1>c2){
 				if(c1>c3){
 					if(c1>c4){
-						testType.add("Cluster 1");
+						testValue.cluster = 1;
 					}
 					else{
-						testType.add("Cluster 4");
+						testValue.cluster = 4;
 					}
 				}
 				else if(c3>c4){
-					testType.add("Cluster 3");
+					testValue.cluster = 3;
 				}
 				else{
-					testType.add("Cluster 4");
+					testValue.cluster = 4;
 				}	
 			}
 			else{
 				if(c2>c3){
 					if(c2>c4){
-						testType.add("Cluster 2");
+						testValue.cluster = 2;
 					}
 					else{
-						testType.add("Cluster 4");
+						testValue.cluster = 4;
 					}
 				}
 				else{
 					if(c3>c4){
-						testType.add("Cluster 3");
+						testValue.cluster = 3;
 					}
 					else{
-						testType.add("Cluster 4");
+						testValue.cluster = 4;
 					}
 				}	
 			}
@@ -100,7 +98,7 @@ public class KNN {
 		
 		
 		for(int x = 0; x < testList.size(); x++){
-			System.out.println("The value: " + testList.get(x).voltAverage + " V / " + testList.get(x).phaseAverage + "º belongs to " + testType.get(x));
+			System.out.println("The value: " + testList.get(x).voltAverage + " V / " + testList.get(x).phaseAverage + "º belongs to " + testList.get(x).cluster);
 		}
 	}
 }

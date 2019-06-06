@@ -69,10 +69,8 @@ public class MachineLearning {
 //			
 //		}
 		
-		//Plot the clustering
-		ScatterPlot.printScatterPlot("Clustering graph", measureClusters);
-				
 		
+				
 		//Reading analog_values data
 		String testFile = "analog_values.csv";
 		read_data(testFile); //It can be used to read the test data
@@ -80,14 +78,24 @@ public class MachineLearning {
 		//Creation of the arraylist from analog_values
 		ArrayList<Measurements> testList = measurementsCreation(timeList,nameValues,values,subIDs);
 		
+		for (Measurements testValue: testList){
+			System.out.println("The test value is " + testValue.voltAverage);
+		}
 		//Running the KNN Classification
-		KNN.KNNClassification(measureClusters, testList);
+		KNN.KNNClassification(measurementsList, testList);
 		
+		//Plot the clustering
+		ScatterPlot.printScatterPlot("Scatter graph", measurementsList, testList, centroids);
 		
 	}
 	
 	
 	public static void read_data(String dataFile) {
+		
+		nameValues.clear();
+		timeList.clear();
+		values.clear();
+		subIDs.clear();
 		
 		BufferedReader br = null;
 		String line = "";
@@ -138,7 +146,7 @@ public class MachineLearning {
 	
 		} catch (IOException e) {
 		e.printStackTrace();
-	}		
+		}		
 	}
 	
 	public static ArrayList<Measurements> measurementsCreation (ArrayList<Double> listTime, ArrayList<String> listNames, ArrayList<Double> listValues, ArrayList<String> substations) {
@@ -236,6 +244,7 @@ public class MachineLearning {
 		return normList;
 		
 	}	
+	 
 	
 	public static void intialize(ArrayList<NormalizedMeasurement> normList) {
 		
@@ -395,8 +404,20 @@ public class MachineLearning {
 		}
 		
 		centroids = new_centroids;		
-		
 	}
+	
+	public static void denormalizeCentroids() {
+		
+		Double final_centroids[][] = { {0.0,0.0},{0.0,0.0},{0.0,0.0},{0.0,0.0} };
+		
+		
+		for (int i=0; i<4; i++){
+			final_centroids[i][0] = centroids[i][0]*(maxVolt-minVolt) + minVolt;
+			final_centroids[i][1] = centroids[i][1]*(maxPhase-minPhase) + minPhase;
+		}
+		centroids = final_centroids;
+	}
+	
 	
 	public static void k_means(ArrayList<NormalizedMeasurement> normList, ArrayList<Measurements> measurements) {
 		
@@ -491,6 +512,10 @@ public class MachineLearning {
 			
 		}
 		
+	
+		denormalizeCentroids();
+		
+		
 		System.out.println("Cluster 1 has " + clus1.size());
 		System.out.println("Cluster 2 has " + clus2.size());
 		System.out.println("Cluster 3 has " + clus3.size());
@@ -500,78 +525,39 @@ public class MachineLearning {
 			
 			for(int i=0 ; i<clus1.size() ; i++) {
 				
-				if(measurements.get(j).time == clus1.get(i).time) {						
-				Sol_Kmeans sol = new Sol_Kmeans(clus1.get(i).time,measurements.get(j).voltAverage,measurements.get(j).phaseAverage,0);
-				measureClusters.add(sol);
+				if(measurements.get(j).time == clus1.get(i).time) {
+					measurements.get(j).cluster = 0;
 				break;
 				}	
 			}
 			
-		
 			for(int i=0 ; i<clus2.size() ; i++) {
 				
-				if(measurements.get(j).time == clus2.get(i).time) {		
-				Sol_Kmeans sol = new Sol_Kmeans(clus2.get(i).time,measurements.get(j).voltAverage,measurements.get(j).phaseAverage,1);
-				measureClusters.add(sol);
+				if(measurements.get(j).time == clus2.get(i).time) {	
+					measurements.get(j).cluster = 1;
 				break;
 				}	
 			}
-		
-		
+			
 			for(int i=0 ; i<clus3.size() ; i++) {
 			
 				if(measurements.get(j).time == clus3.get(i).time) {
-				Sol_Kmeans sol = new Sol_Kmeans(clus3.get(i).time,measurements.get(j).voltAverage,measurements.get(j).phaseAverage,2);
-				measureClusters.add(sol);
+					measurements.get(j).cluster = 2;
 				break;
 				}	
 			}
 			
-		
 			for(int i=0 ; i<clus4.size() ; i++) {
 			
 				if(measurements.get(j).time == clus4.get(i).time) {
-				Sol_Kmeans sol = new Sol_Kmeans(clus4.get(i).time,measurements.get(j).voltAverage,measurements.get(j).phaseAverage,3);
-				measureClusters.add(sol);
+					measurements.get(j).cluster = 3;
 				break;
 				}	
 			}
 		}
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

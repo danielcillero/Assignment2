@@ -8,6 +8,7 @@ public class Measurements {
 	String names[];
 	Double voltAverage;
 	Double phaseAverage;
+	int	cluster;
 	
 	public Measurements(Double timeStep, Double[] voltage, Double[] phases, String[] namesOfValues) {
 		this.time = timeStep;
