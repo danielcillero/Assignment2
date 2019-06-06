@@ -69,6 +69,10 @@ public class MachineLearning {
 //			
 //		}
 		
+		//Plot the clustering
+		ScatterPlot.printScatterPlot("Clustering graph", measureClusters);
+				
+		
 		String testFile = "analog_values.csv";
 		
 		read_data(testFile); //It can be used to read the test data
@@ -76,6 +80,8 @@ public class MachineLearning {
 		ArrayList<Measurements> testList = measurementsCreation(timeList,nameValues,values,subIDs);
 		
 		KNN.KNNClassification(measureClusters, testList);
+		
+		
 		
 	}
 	

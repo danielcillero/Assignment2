@@ -98,12 +98,10 @@ public class KNN {
 			
 		}
 		
-		System.out.println("The size of testlist(analog_values) is: " + testList.size());
-		System.out.println("The size of testType is: " + testType.size());
 		
-		for(int x = 0; x < testList.size(); x++){
-			System.out.println(testList.get(x).voltAverage + " " + testList.get(x).phaseAverage + " is from the cluster " + testType.get(x));
-		}
+		//for(int x = 0; x < testList.size(); x++){
+		//	System.out.println(testList.get(x).voltAverage + " " + testList.get(x).phaseAverage + " is from the cluster " + testType.get(x));
+		//}
 	}
 }
 		
