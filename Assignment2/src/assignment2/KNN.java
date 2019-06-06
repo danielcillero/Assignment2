@@ -99,9 +99,9 @@ public class KNN {
 		}
 		
 		
-		//for(int x = 0; x < testList.size(); x++){
-		//	System.out.println(testList.get(x).voltAverage + " " + testList.get(x).phaseAverage + " is from the cluster " + testType.get(x));
-		//}
+		for(int x = 0; x < testList.size(); x++){
+			System.out.println("The value: " + testList.get(x).voltAverage + " V / " + testList.get(x).phaseAverage + "º belongs to " + testType.get(x));
+		}
 	}
 }
 		
