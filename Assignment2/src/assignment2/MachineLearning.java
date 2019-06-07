@@ -32,7 +32,7 @@ public class MachineLearning {
 		//List of measurements
 		ArrayList<Measurements> measurementsList = measurementsCreation(timeList,nameValues,values,subIDs);
 	
-		// Normalaizing
+		// Normalizing
 		ArrayList<NormalizedMeasurement> normList = normalize(measurementsList); //It can be used to read the test data
 		
 		// K Means
