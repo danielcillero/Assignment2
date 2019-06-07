@@ -23,54 +23,23 @@ public class MachineLearning {
 	static ArrayList<NormalizedMeasurement> clus3 = new ArrayList<>();
 	static ArrayList<NormalizedMeasurement> clus4 = new ArrayList<>();
 	
-	static ArrayList<Sol_Kmeans> measureClusters = new ArrayList<>();
-	
 	public static void main(String[] args) {
 		
+		// Reading Data (Measurements)
 		String learningFile = "measurements.csv";
-		
 		read_data(learningFile); //It can be used to read the test data
 		
+		//List of measurements
 		ArrayList<Measurements> measurementsList = measurementsCreation(timeList,nameValues,values,subIDs);
-		
-//		for (int i=0 ; i<measurementsList.size() ; i++) {
-//			System.out.println(measurementsList.get(i).VoltAverage + " with phase " + measurementsList.get(i).PhaseAverage +
-//					" is the average voltage of the time " + measurementsList.get(i).Time);
-//		}
-		
+	
+		// Normalaizing
 		ArrayList<NormalizedMeasurement> normList = normalize(measurementsList); //It can be used to read the test data
-
-//		for (int i=0 ; i<normList.size() ; i++) {
-//			System.out.println(normList.get(i).time + " has the voltage " + normList.get(i).volt + " and the phase "
-//					+ normList.get(i).phase);
-//		}		
-				
-		intialize(normList);
 		
-//		System.out.println("Cluster 1 has " + clus1.size() + ". Cluster 2 has " + clus2.size() + ". Cluster 3 has "
-//				+ clus3.size() + ". Cluster 4 has " + clus4.size());
-		
-		determine_centroids();
-		
-//		for (int i=0; i<2 ; i++) {
-//			for (int j=0 ; j<4 ; j++) {
-//				
-//				System.out.println("The Centroid " + j + " has the cordinate " + i + " equal to " + centroids[j][i]);
-//				
-//			}			
-//		}
-		
+		// K Means
+		intialize(normList);				
+		determine_centroids();				
 		k_means(normList,measurementsList);
-		
-//		for (int i=0 ; i<measureClusters.size() ; i++) {
-//			
-//			System.out.println("The time step " + measureClusters.get(i).time + " is of the class " + measureClusters.get(i).cluster + 
-//					", its voltage is " + measureClusters.get(i).volt + " and its phase, " + measureClusters.get(i).phase);
-//			
-//		}
-		
-		
-				
+						
 		//Reading analog_values data
 		String testFile = "analog_values.csv";
 		read_data(testFile); //It can be used to read the test data
@@ -81,6 +50,7 @@ public class MachineLearning {
 		for (Measurements testValue: testList){
 			System.out.println("The test value is " + testValue.voltAverage);
 		}
+		
 		//Running the KNN Classification
 		KNN.KNNClassification(measurementsList, testList);
 		
