@@ -40,16 +40,14 @@ public class MachineLearning {
 		determine_centroids();				
 		k_means(normList,measurementsList);
 						
-		//Reading analog_values data
+		
+		
+		//Reading analog_values data 
 		String testFile = "analog_values.csv";
 		read_data(testFile); //It can be used to read the test data
 		
 		//Creation of the arraylist from analog_values
 		ArrayList<Measurements> testList = measurementsCreation(timeList,nameValues,values,subIDs);
-		
-		for (Measurements testValue: testList){
-			System.out.println("The test value is " + testValue.voltAverage);
-		}
 		
 		//Running the KNN Classification
 		KNN.KNNClassification(measurementsList, testList);
@@ -484,6 +482,12 @@ public class MachineLearning {
 		
 	
 		denormalizeCentroids();
+		
+		for (int i=0;i<4;i++){
+			
+			System.out.println("Final position centroid " + i + ": " + centroids[i][0]+ ", " + centroids[i][1]);
+			
+		}
 		
 		
 		System.out.println("Cluster 1 has " + clus1.size());
