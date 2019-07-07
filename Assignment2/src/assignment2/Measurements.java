@@ -2,6 +2,9 @@ package assignment2;
 
 public class Measurements {
 	
+	String bus;
+	Double voltage;
+	Double angle;
 	Double volt[];
 	Double phase[];
 	Double time;
@@ -9,6 +12,13 @@ public class Measurements {
 	Double voltAverage;
 	Double phaseAverage;
 	int	cluster;
+	
+	public Measurements(Double timeStep, Double voltage, Double phases, String busName) {
+		this.time = timeStep;
+		this.voltage = voltage;
+		this.angle = phases;
+		this.bus = busName;
+	}
 	
 	public Measurements(Double timeStep, Double[] voltage, Double[] phases, String[] namesOfValues) {
 		this.time = timeStep;

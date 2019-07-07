@@ -98,7 +98,7 @@ public class KNN {
 		
 		
 		for(int x = 0; x < testList.size(); x++){
-			System.out.println("The value: " + testList.get(x).voltAverage + " V / " + testList.get(x).phaseAverage + "º belongs to " + testList.get(x).cluster);
+			//System.out.println("The value: " + testList.get(x).voltAverage + " V / " + testList.get(x).phaseAverage + "º belongs to " + testList.get(x).cluster);
 		}
 	}
 }

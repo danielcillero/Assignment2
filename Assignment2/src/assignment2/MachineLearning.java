@@ -29,6 +29,55 @@ public class MachineLearning {
 		String learningFile = "measurements.csv";
 		read_data(learningFile); //It can be used to read the test data
 		
+		
+		ArrayList <Measurements> measList = new ArrayList<Measurements>();
+		
+		for (int i=0; i<timeList.size(); i=i+2){
+			
+			System.out.println(nameValues.get(i));
+			
+			String busName = null;
+			
+	
+			
+			switch (nameValues.get(i)){
+			case "CLAR_VOLT":
+				busName = "B1";
+				break;
+			case "AMHE_VOLT":
+				busName = "B2";
+				break;
+			case "WINL_VOLT":
+				busName = "B3";
+				break;
+			case "BOWM_VOLT":
+				busName = "B4";
+				break;
+			case "TROY_VOLT":
+				busName = "B5";
+				break;
+			case "MAPL_VOLT":
+				busName = "B6";
+				break;
+			case "GRAN_VOLT":
+				busName = "B7";
+				break;
+			case "WAUT_VOLT":
+				busName = "B8";
+				break;
+			case "CROSS_VOLT":
+				busName = "B9";
+				break;
+			}
+			
+			System.out.println(busName);
+			
+			Measurements meas = new Measurements (timeList.get(i), values.get(i), values.get(i+1), busName);
+			measList.add(meas);
+		}
+		
+		System.out.println("The bus is: " + measList.get(0).bus);
+		
 		//List of measurements
 		ArrayList<Measurements> measurementsList = measurementsCreation(timeList,nameValues,values,subIDs);
 	
@@ -39,7 +88,11 @@ public class MachineLearning {
 		intialize(normList);				
 		determine_centroids();				
 		k_means(normList,measurementsList);
-						
+		
+		
+		//Está feo pero da resultado correcto (creo)
+		clusteringBuses(measurementsList, measList);
+	
 		
 		
 		//Reading analog_values data 
@@ -53,7 +106,12 @@ public class MachineLearning {
 		KNN.KNNClassification(measurementsList, testList);
 		
 		//Plot the clustering
-		ScatterPlot.printScatterPlot("Scatter graph", measurementsList, testList, centroids);
+		ScatterPlot.printScatterPlot("K-means for average values", measurementsList, testList, centroids);
+		
+		ScatterPlot_Buses.printScatterPlot("Cluster 1. Buses values", measList, 0);
+		ScatterPlot_Buses.printScatterPlot("Cluster 2. Buses values", measList, 1);
+		ScatterPlot_Buses.printScatterPlot("Cluster 3. Buses values", measList, 2);
+		ScatterPlot_Buses.printScatterPlot("Cluster 4. Buses values", measList, 3);
 		
 	}
 	
@@ -116,6 +174,8 @@ public class MachineLearning {
 		e.printStackTrace();
 		}		
 	}
+	
+	
 	
 	public static ArrayList<Measurements> measurementsCreation (ArrayList<Double> listTime, ArrayList<String> listNames, ArrayList<Double> listValues, ArrayList<String> substations) {
 		
@@ -531,7 +591,24 @@ public class MachineLearning {
 		}
 		
 	}
-
-
+	
+	public static void clusteringBuses (ArrayList<Measurements> averageList, ArrayList<Measurements> measList){
+		
+		for (int i=0; i<measList.size();i=i+9){
+			for (int j=0; j<averageList.size(); j++){
+				if (measList.get(i).time==averageList.get(j).time){
+					measList.get(i).cluster = averageList.get(j).cluster;
+					measList.get(i+1).cluster = averageList.get(j).cluster;
+					measList.get(i+2).cluster = averageList.get(j).cluster;
+					measList.get(i+3).cluster = averageList.get(j).cluster;
+					measList.get(i+4).cluster = averageList.get(j).cluster;
+					measList.get(i+5).cluster = averageList.get(j).cluster;
+					measList.get(i+6).cluster = averageList.get(j).cluster;
+					measList.get(i+7).cluster = averageList.get(j).cluster;
+					measList.get(i+8).cluster = averageList.get(j).cluster;
+				}
+			}
+		}
+	}
 }
 
